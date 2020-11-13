@@ -10,7 +10,7 @@ var schema = buildSchema(`
     },
     type Mutation {
         updateCourseTopic(id: Int!, topic: String!): Course
-        addCourse(id: Int!, title: String!, author: String!, description: String!, topic: String!, url: String!): Course
+        addCourse(title: String!, author: String!, description: String!, topic: String!, url: String!): [Course]
     }
     type Course {
         id: Int
@@ -80,8 +80,18 @@ const updateCourseTopic = function({id, topic}) {
     return coursesData.filter(course => course.id === id) [0];
 }
 
-const addCourse = async (newCourse) => {
-    await coursesData.push(newCourse)
+const addCourse = function({ title, author, description, topic, url }) {
+    let id = coursesData.length++
+
+    const newCourse = {
+        id: id,
+        title: title,
+        author: author,
+        description: description,
+        topic: topic,
+        url: url
+    }
+    coursesData.push(newCourse)
     return coursesData
 }
 
